@@ -1,0 +1,113 @@
+<div class="people-list-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h1>People</h1>
+      </mat-card-title>
+      <div class="header-actions">
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="onCreateNew()"
+          aria-label="Add new person">
+          <mat-icon>add</mat-icon>
+          Add New Person
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (loading()) {
+        <div class="loading-container" role="status" aria-live="polite">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>Loading...</p>
+        </div>
+      }
+
+      @if (!loading() && people().length === 0) {
+        <div class="empty-state">
+          <mat-icon>group</mat-icon>
+          <p>No people found. Create your first person to get started.</p>
+          <button mat-raised-button color="primary" (click)="onCreateNew()">
+            <mat-icon>add</mat-icon>
+            Add First Person
+          </button>
+        </div>
+      }
+
+      @if (!loading() && people().length > 0) {
+        <div class="table-container">
+          <table mat-table [dataSource]="people()" aria-label="People list">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Name</th>
+              <td mat-cell *matCellDef="let person">{{ person.name }}</td>
+            </ng-container>
+
+            <!-- Birthday Column -->
+            <ng-container matColumnDef="birthday">
+              <th mat-header-cell *matHeaderCellDef>Birthday</th>
+              <td mat-cell *matCellDef="let person">{{ person.birthday || '-' }}</td>
+            </ng-container>
+
+            <!-- Address Column -->
+            <ng-container matColumnDef="address">
+              <th mat-header-cell *matHeaderCellDef>Address</th>
+              <td mat-cell *matCellDef="let person">{{ person.address || '-' }}</td>
+            </ng-container>
+
+            <!-- Phone Column -->
+            <ng-container matColumnDef="phone">
+              <th mat-header-cell *matHeaderCellDef>Phone</th>
+              <td mat-cell *matCellDef="let person">{{ person.phone || '-' }}</td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let person">
+                <button 
+                  mat-icon-button 
+                  color="primary"
+                  (click)="onEdit(person.id)"
+                  [attr.aria-label]="'Edit ' + person.name">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button 
+                  mat-icon-button 
+                  color="warn"
+                  (click)="onDelete(person.id, person.name)"
+                  [attr.aria-label]="'Delete ' + person.name">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+
+        <div class="pagination" role="navigation" aria-label="Pagination">
+          <button 
+            mat-button
+            (click)="onPreviousPage()"
+            [disabled]="currentPage() === 0"
+            aria-label="Previous page">
+            <mat-icon>chevron_left</mat-icon>
+            Previous
+          </button>
+          <span class="page-info" aria-live="polite">Page {{ currentPage() + 1 }}</span>
+          <button 
+            mat-button
+            (click)="onNextPage()"
+            [disabled]="people().length < pageSize()"
+            aria-label="Next page">
+            Next
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,4 +1,3 @@
-
 You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.
 
 ## TypeScript Best Practices
@@ -16,6 +15,13 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
 - Use `NgOptimizedImage` for all static images.
   - `NgOptimizedImage` does not work for inline base64 images.
+
+## Angular Material
+
+- Use Angular Material components for common UI elements (buttons, inputs, cards, etc.).
+- When a suitable Material component exists, prefer it over creating a custom component.
+- Use Material Icons for iconography.
+- Follow the official Angular Material documentation for usage and accessibility best practices.
 
 ## Accessibility Requirements
 
