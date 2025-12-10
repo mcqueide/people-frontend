@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const API = process.env.API || 'http://localhost:8080';
+const API = process.env.API_URL || 'http://api:8080';
 
 // Instead of app.use('/api', ...), you can pass the path inside the middleware config
 app.use(createProxyMiddleware({

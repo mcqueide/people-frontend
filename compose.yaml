@@ -8,19 +8,78 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  frontend:
+  app:
     build:
       context: .
-    container_name: frontend
-    environment:
-      NODE_ENV: production
-      API_URL: http://docker-test-app-1:8080
-    ports:
-      - 3000:3000
+      dockerfile: Dockerfile
+    image: people-frontend:latest
+    container_name: app
+
+    # Drop all capabilities (principle of least privilege)
+    cap_drop:
+      - ALL
+
+    # Security options
+    security_opt:
+      - no-new-privileges:true # Prevent escalation
+
+    # Restart policy
+    restart: unless-stopped
+    
     networks:
-      - docker-test_backend
+      - people_backend
+
+    # Ports: DO NOT expose externally in production
+    # ports:
+    #   - "3000:3000"  # ❌ For debug only, remove in production
+
+    # Ports (not externally exposed, only through nginx)
+    expose:
+      - "3000"
+
+    # Not required, docker uses .env by default
+    env_file:
+      - .env
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+      # Replica configuration (2 application instances)
+      # Note: deploy.replicas is fully supported only in Docker Swarm
+      # For Compose standalone, use: docker compose up -d --scale app=2
+      # replicas: 2
+      # Configurations below only work in Docker Swarm:
+      # update_config:
+      #   parallelism: 1
+      #   delay: 10s
+      #   order: start-first
+      # rollback_config:
+      #   parallelism: 1
+      #   delay: 5s
+
+    # Structured logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+        labels: "service,tier,environment"
+        tag: "{{.Name}}/{{.ID}}"
+    
+    # Labels
+    labels:
+      service: "app"
+      tier: "backend"
+      environment: "${ENVIRONMENT:-production}"
+      version: "${APP_VERSION:-1.0.0}"
 
 networks:
-  docker-test_backend:
+  people_backend:
     external: true
     
