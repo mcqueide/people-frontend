@@ -53,6 +53,9 @@ FROM base as final
 # Use production node environment by default.
 ENV NODE_ENV production
 
+# Create a directory for log files.
+RUN mkdir logs
+
 # Run the application as a non-root user.
 USER node
 
