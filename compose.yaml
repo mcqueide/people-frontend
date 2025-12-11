@@ -12,7 +12,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: people-frontend:latest
+    image: mcqueide/people-frontend:v0.0.1
     container_name: app
 
     # Drop all capabilities (principle of least privilege)

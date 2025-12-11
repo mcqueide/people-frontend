@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: people-frontend
+  labels:
+    app: people-frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: people-frontend
+  template:
+    metadata:
+      labels:
+        app: people-frontend
+    spec:
+      containers:
+      - name: people-frontend
+        image: mcqueide/people-frontend:v0.0.1
+        ports:
+        - containerPort: 3000
+        
+        envFrom:
+        - configMapRef:
+            name: app-env
+
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "0.25"
+          limits:
+            memory: "256Mi"
+            cpu: "0.5"
+        
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+      
