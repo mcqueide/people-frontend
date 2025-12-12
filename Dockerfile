@@ -6,7 +6,7 @@
 
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
-ARG NODE_VERSION=24.11.1
+ARG NODE_VERSION=24.12
 
 ################################################################################
 # Use node image for base image for all stages.
@@ -14,6 +14,9 @@ FROM node:${NODE_VERSION}-alpine AS base
 
 # Set working directory for all build stages.
 WORKDIR /usr/src/app
+
+# Update npm to the latest version to fix npm CVEs.
+RUN npm install -g npm@latest
 
 
 ################################################################################
