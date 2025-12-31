@@ -65,15 +65,16 @@ USER node
 # Copy package.json so that package manager commands can be used.
 COPY package.json .
 COPY server.js .
+COPY generate-env.sh .
 
 # Copy the production dependencies from the deps stage and also
 # the built application from the build stage into the image.
-COPY --from=deps /usr/src/app/node_modules ./node_modules
-COPY --from=build /usr/src/app/dist ./dist
+COPY --from=deps --chown=node:node /usr/src/app/node_modules ./node_modules
+COPY --from=build --chown=node:node /usr/src/app/dist ./dist
 
 
 # Expose the port that the application listens on.
 EXPOSE 3000
 
-# Run the application.
-CMD ["npm", "run", "start:prod"]
+# Generate env.js at runtime and start the application
+CMD sh generate-env.sh && npm run start:prod
