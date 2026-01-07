@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: people-frontend
-        image: mcqueide/people-frontend:v0.0.1
+        image: mcqueide/people-frontend:55ae3a9
         ports:
         - containerPort: 3000
         
