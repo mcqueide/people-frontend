@@ -245,7 +245,7 @@ sudo mv cosign-linux-amd64 /usr/local/bin/cosign
 sudo chmod +x /usr/local/bin/cosign
 
 # Verify image signature
-cosign verify mcqueide/people-frontend:v1.0.0 \
+cosign verify mcqueide/people-frontend:v1.1.0 \
   --certificate-identity-regexp="https://github.com/mcqueide/people-frontend" \
   --certificate-oidc-issuer="https://token.actions.githubusercontent.com"
 ```
